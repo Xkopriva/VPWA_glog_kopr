@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Flack logo</title>
+  <desc id="desc">A playful four-part chat mascot with expressive eyes and the word Flack beneath it.</desc>
+
+  <rect width="1200" height="1000" fill="#fffdf8"/>
+
+  <!-- playful motion marks -->
+  <g fill="none" stroke="#172554" stroke-width="18" stroke-linecap="round">
+    <path d="M155 255l-55-38"/>
+    <path d="M145 315l-65-5"/>
+    <path d="M175 190l-25-60"/>
+    <path d="M1045 355l42-55"/>
+    <path d="M1070 405l62-25"/>
+    <path d="M1065 455l55 8"/>
+  </g>
+
+  <!-- left arm -->
+  <path d="M310 470 C235 470 205 425 205 375" fill="none" stroke="#172554" stroke-width="34" stroke-linecap="round"/>
+  <path d="M205 375c-32 12-55-7-52-35 3-27 32-37 55-17l28 25" fill="#172554"/>
+
+  <!-- right arm -->
+  <path d="M920 535 C1000 540 1015 590 980 640" fill="none" stroke="#172554" stroke-width="34" stroke-linecap="round"/>
+  <path d="M980 640c34-4 52 21 42 47-10 26-42 29-58 5l-18-29" fill="#172554"/>
+
+  <!-- four colorful speech tiles -->
+  <path d="M315 285 Q315 185 415 185 L505 185 Q600 185 600 280 L600 365 Q600 420 545 420 L405 420 Q315 420 315 330Z" fill="#24a8e8"/>
+  <path d="M630 180 Q630 115 695 115 L790 115 Q875 115 875 200 L875 330 Q875 405 800 405 L705 405 Q630 405 630 330Z" fill="#27a77a"/>
+  <path d="M330 450 Q330 410 375 410 L555 410 Q620 410 620 475 L620 565 Q620 625 560 625 L395 625 Q330 625 330 560Z" fill="#ed2b73"/>
+  <path d="M655 435 Q655 390 705 390 L855 390 Q945 390 945 480 L945 560 Q945 635 870 635 L790 635 L805 705 L735 650 Q655 625 655 555Z" fill="#ffb81c"/>
+
+  <!-- face -->
+  <ellipse cx="468" cy="300" rx="42" ry="55" fill="#fffdf8"/>
+  <ellipse cx="485" cy="305" rx="20" ry="32" fill="#172554"/>
+  <path d="M700 285q42-42 84 0q-38-5-84 0z" fill="#172554"/>
+
+  <!-- mischievous mouth -->
+  <path d="M520 470 Q590 425 665 465 Q645 535 585 545 Q540 530 520 470Z" fill="#172554"/>
+  <path d="M570 515 Q590 480 625 515 Q610 555 585 555 Q575 545 570 515Z" fill="#ff6fa5"/>
+
+  <!-- little speech/doodle accents -->
+  <g stroke="#fffdf8" stroke-width="12" stroke-linecap="round">
+    <path d="M520 910l20-28"/>
+    <path d="M545 920l28-20"/>
+    <path d="M570 925l32-8"/>
+  </g>
+
+  <!-- wordmark -->
+  <g fill="#172554">
+    <text x="600" y="875" text-anchor="middle"
+          font-family="Arial, Helvetica, sans-serif"
+          font-size="180" font-weight="900" letter-spacing="-8">Flack</text>
+  </g>
+</svg>

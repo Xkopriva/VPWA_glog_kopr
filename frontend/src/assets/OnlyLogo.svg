@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Flack mascot logo</title>
+  <desc id="desc">A playful four-part chat mascot with one open eye, one wink, a grin, arms, and motion marks.</desc>
+
+  <rect width="1200" height="1000" fill="white"/>
+
+  <!-- motion marks -->
+  <g fill="none" stroke="#172554" stroke-width="18" stroke-linecap="round">
+    <path d="M150 300l-58-40"/>
+    <path d="M132 355l-68-6"/>
+    <path d="M170 238l-25-63"/>
+    <path d="M1040 390l45-58"/>
+    <path d="M1070 440l65-26"/>
+    <path d="M1070 492l60 9"/>
+  </g>
+
+  <!-- left arm and hand -->
+  <path d="M315 500 C240 495 205 445 205 390" fill="none"
+        stroke="#172554" stroke-width="36" stroke-linecap="round"/>
+  <path d="M205 390
+           C170 405 143 383 147 352
+           C151 322 184 313 207 334
+           L238 363
+           L254 329
+           C267 301 300 308 305 338
+           L305 390
+           C304 416 270 433 245 417"
+        fill="#172554"/>
+
+  <!-- right arm and hand -->
+  <path d="M925 565 C1005 570 1025 625 982 680" fill="none"
+        stroke="#172554" stroke-width="36" stroke-linecap="round"/>
+  <path d="M982 680
+           C1018 675 1040 700 1030 730
+           C1020 760 985 765 966 739
+           L946 711
+           C932 690 949 666 970 660"
+        fill="#172554"/>
+
+  <!-- cyan tile -->
+  <path d="M300 300
+           Q300 205 400 205
+           L500 205
+           Q590 205 605 295
+           L605 375
+           Q605 430 545 430
+           L395 430
+           Q300 430 300 335Z"
+        fill="#24A8E8"/>
+
+  <!-- green tile -->
+  <path d="M635 195
+           Q635 125 705 125
+           L795 125
+           Q875 125 895 205
+           L895 335
+           Q895 415 810 415
+           L710 415
+           Q635 415 635 335Z"
+        fill="#27A77A"/>
+
+  <!-- pink tile -->
+  <path d="M320 470
+           Q320 420 375 420
+           L555 420
+           Q625 420 625 490
+           L625 565
+           Q625 635 555 635
+           L400 635
+           Q320 635 320 555Z"
+        fill="#ED2B73"/>
+
+  <!-- yellow speech tile -->
+  <path d="M665 450
+           Q665 405 715 405
+           L855 405
+           Q945 405 955 495
+           L955 560
+           Q955 635 875 635
+           L795 635
+           L815 715
+           L735 655
+           Q665 635 665 560Z"
+        fill="#FFB81C"/>
+
+  <!-- open eye -->
+  <ellipse cx="480" cy="320" rx="45" ry="58" fill="white"/>
+  <ellipse cx="500" cy="325" rx="22" ry="34" fill="#172554"/>
+
+  <!-- wink -->
+  <path d="M730 305
+           Q775 265 820 300
+           Q780 300 730 305Z"
+        fill="#172554"/>
+
+  <!-- cheeky mouth -->
+  <path d="M520 485
+           Q590 440 675 480
+           Q655 545 595 560
+           Q545 545 520 485Z"
+        fill="#172554"/>
+  <path d="M575 530
+           Q595 495 630 530
+           Q615 565 590 565
+           Q580 555 575 530Z"
+        fill="#FF72A8"/>
+</svg>
