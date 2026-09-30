@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <q-input v-model="text" label="Chat window / Command line" />
+  <div class="col-9">
+    <q-input class="q-mb-md" v-model="text" label="Chat window / Command line" outlined/>
   </div>
 </template>
 

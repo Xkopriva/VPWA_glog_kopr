@@ -1,14 +1,14 @@
 <template>
   <q-page class="row">
     <!-- Left side of main block -->
-    <div class="col-3">
-      <SideBarLogged />
-    </div>
+    <!-- <div class="col-2"> -->
+      <SideBar />
+    <!-- </div> -->
 
     <!-- Right side of main block -->
     <div class="col-9 column justify-between">
       <!-- Command line at the top -->
-      <div>
+      <div class="col row flex-center">
         <CommandLine />
       </div>
 
@@ -21,6 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import SideBarLogged from '../../components/SideBar.vue';
+import SideBar from '../../components/SideBar.vue';
 import CommandLine from '../../components/CommandLine.vue';
 </script>

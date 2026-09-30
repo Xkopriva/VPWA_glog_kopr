@@ -1,10 +1,7 @@
 <template>
   <q-page class="row">
     <!-- Left side of main block -->
-    <div class="col-3">
-      <SideBar />
-      sfsdfsdsd
-    </div>
+    <SideBar />
 
     <!-- Right side of main block -->
     <div class="col-9 column justify-between">
