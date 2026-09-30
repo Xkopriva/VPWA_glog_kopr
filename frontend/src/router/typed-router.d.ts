@@ -37,11 +37,27 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       Record<never, never>,
       | '//(index)'
+      | '//landing'
+      | '//landing-logged'
       | '//second'
     >,
     '//(index)': RouteRecordInfo<
       '//(index)',
       '/',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '//landing': RouteRecordInfo<
+      '//landing',
+      '/landing',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '//landing-logged': RouteRecordInfo<
+      '//landing-logged',
+      '/landing-logged',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -77,6 +93,8 @@ declare module 'vue-router/auto-routes' {
       routes:
         | '/'
         | '//(index)'
+        | '//landing'
+        | '//landing-logged'
         | '//second'
       views:
         | 'default'
@@ -86,6 +104,22 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index/(index).vue': {
       routes:
         | '//(index)'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/index/landing.vue': {
+      routes:
+        | '//landing'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/index/landing-logged.vue': {
+      routes:
+        | '//landing-logged'
       views:
         | never
       pathParamNames:

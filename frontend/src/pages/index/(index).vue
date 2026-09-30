@@ -17,7 +17,7 @@
         @click="$q.dark.toggle()"
       />
 
-      <q-btn class="q-mt-md" color="primary" to="/second" label="Go to Second Page" no-caps />
+      <q-btn class="q-mt-md" color="primary" to="/landing" label="Go to landing page" no-caps />
     </div>
   </q-page>
 </template>
