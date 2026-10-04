@@ -17,7 +17,7 @@
           v-for="n in 7"
           :key="n"
           :label="`Server name ${n}`"
-          :to="`/server${n}`"
+          :to="`/chatting`"
           outline
           class="full-width dark"
         />
