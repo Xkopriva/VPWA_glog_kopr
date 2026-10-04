@@ -1,12 +1,12 @@
 <template>
   <q-page class="row">
     <!-- Left side of main block -->
-    <!-- <div class="col-2"> -->
+    <div class="col-2">
       <SideBar />
-    <!-- </div> -->
+    </div>
 
     <!-- Right side of main block -->
-    <div class="col-9 column justify-between">
+    <div class="col-10 column justify-between">
       <!-- Command line at the top -->
       <div class="col row flex-center">
         <CommandLine />

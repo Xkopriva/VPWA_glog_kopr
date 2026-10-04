@@ -2,19 +2,16 @@
   <div>
     <q-card flat bordered class="q-pa-md">
       <q-card-section class="bg-primary text-white text-center rounded-borders q-mb-lg">
-        <div class="text-h4 text-bold">REGISTER</div>
+        <div class="text-h4 text-bold">Login</div>
       </q-card-section>
 
       <q-card-section>
         <q-form @submit="onSubmit" class="q-gutter-y-md">
-          <q-input v-model="form.nickname" label="Nickname" outlined dense />
           <q-input v-model="form.email" label="Email" type="email" outlined dense />
-          <q-input v-model="form.name" label="Name" outlined dense />
-          <q-input v-model="form.surname" label="Surname" outlined dense />
           <q-input v-model="form.password" label="Password" type="password" outlined dense />
 
           <div class="row flex-center q-mt-lg">
-            <q-btn type="submit" label="REGISTER" color="primary" size="lg" class="full-width" />
+            <q-btn type="submit" label="LOGIN" color="primary" size="lg" class="full-width" />
           </div>
         </q-form>
       </q-card-section>
@@ -30,10 +27,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const form = ref({
-  nickname: '',
   email: '',
-  name: '',
-  surname: '',
   password: '',
 });
 

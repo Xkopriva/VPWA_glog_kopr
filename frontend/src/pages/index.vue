@@ -5,7 +5,15 @@
         <!-- <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" /> -->
 
         <q-toolbar-title> IMAGE Flack </q-toolbar-title>
-
+        <!-- Dark Mode Toggle Button -->
+        <q-btn
+          class="q-mx-md"
+          :color="$q.dark.isActive ? 'amber' : 'dark'"
+          :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
+          :label="$q.dark.isActive ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+          no-caps
+          @click="$q.dark.toggle()"
+        />
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
