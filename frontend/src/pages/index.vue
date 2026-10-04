@@ -15,6 +15,9 @@
           @click="$q.dark.toggle()"
         />
         <div>Quasar v{{ $q.version }}</div>
+        <!-- TODO: theme toggle was already impelemented, 
+        decide if you want the button up or this component, i think the component is better -->
+        <theme-toggle />
       </q-toolbar>
     </q-header>
 
@@ -31,6 +34,8 @@
 </template>
 
 <script setup lang="ts">
+import ThemeToggle from '@/components/ThemeToggle.vue';
+
 // import { ref } from 'vue';
 
 // const leftDrawerOpen = ref(false);

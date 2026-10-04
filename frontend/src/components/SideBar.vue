@@ -1,6 +1,6 @@
 <template>
-  <!-- TODO: replace style="height: 100vh;" with custom class that sets that div to 100vh - it does 100% of viewport height -->
-  <div class="column q-pa-sm" style="height: 94vh; border-style: none solid none none; border-color: DodgerBlue;">
+  <!-- TODO: replace style="height: 93vh;" with custom class that sets that div to 93vh - it does 93% of viewport height -->
+  <div class="column q-pa-sm" style="height: 93vh; border-style: none solid none none; border-color: DodgerBlue;">
 
     <q-btn
       class="text-subtitle1 text-center q-pa-sm q-mx-sm q-my-lg full-width"
@@ -19,8 +19,7 @@
           :label="`Server name ${n}`"
           :to="`/server${n}`"
           outline
-          color="black"
-          class="full-width"
+          class="full-width dark"
         />
       </div>
     </q-scroll-area>

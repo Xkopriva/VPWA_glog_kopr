@@ -37,12 +37,20 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       Record<never, never>,
       | '//(index)'
+      | '//chatting'
       | '//landing'
       | '//landing-logged'
     >,
     '//(index)': RouteRecordInfo<
       '//(index)',
       '/',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '//chatting': RouteRecordInfo<
+      '//chatting',
+      '/chatting',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -85,6 +93,7 @@ declare module 'vue-router/auto-routes' {
       routes:
         | '/'
         | '//(index)'
+        | '//chatting'
         | '//landing'
         | '//landing-logged'
       views:
@@ -95,6 +104,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index/(index).vue': {
       routes:
         | '//(index)'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/index/chatting.vue': {
+      routes:
+        | '//chatting'
       views:
         | never
       pathParamNames:
