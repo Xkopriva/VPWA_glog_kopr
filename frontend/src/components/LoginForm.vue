@@ -7,8 +7,9 @@
 
       <q-card-section>
         <q-form @submit="onSubmit" class="q-gutter-y-md">
-          <q-input v-model="form.email" label="Email" type="email" outlined dense />
-          <q-input v-model="form.password" label="Password" type="password" outlined dense />
+          <q-input v-model="form.email" label="Email / Nickname" outlined dense :rules="[req]" lazy-rules />
+          <q-input v-model="form.password" label="Password" type="password" outlined dense :rules="[req]" lazy-rules />
+          <div class="text-caption text-grey">Demo: <b>jana</b> / <b>1234</b></div>
 
           <div class="row flex-center q-mt-lg">
             <q-btn type="submit" label="LOGIN" color="primary" size="lg" class="full-width" />
@@ -16,15 +17,18 @@
         </q-form>
       </q-card-section>
     </q-card>
-    
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { Notify } from 'quasar';
+import { useChat } from '@/stores/chat';
 
 const router = useRouter();
+const { login, requestNotifyPermission } = useChat();
+const req = (v: string) => !!v || 'Required';
 
 const form = ref({
   email: '',
@@ -32,7 +36,12 @@ const form = ref({
 });
 
 function onSubmit() {
-  // routing to logged page
-  void router.push('/landing-logged');
+  const r = login(form.value.email, form.value.password);
+  Notify.create({ type: r.ok ? 'positive' : 'negative', message: r.message });
+  if (r.ok) {
+    requestNotifyPermission();
+    // routing to logged page
+    void router.push('/landing-logged');
+  }
 }
 </script>

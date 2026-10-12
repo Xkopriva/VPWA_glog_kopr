@@ -6,6 +6,7 @@ import {
   createWebHashHistory,
   createWebHistory,
 } from 'vue-router';
+import { useChat } from '@/stores/chat';
 
 /*
  * If not building with SSR mode, you can
@@ -31,6 +32,14 @@ export default defineRouter((/* { store, ssrContext } */) => {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(import.meta.env.QUASAR_VUE_ROUTER_BASE),
+  });
+
+  // guardy: chránené stránky iba pre prihlásených, landing iba pre neprihlásených
+  Router.beforeEach((to) => {
+    const authed = !!useChat().me.value;
+    if (!authed && (to.path === '/chatting' || to.path === '/landing-logged')) return '/landing';
+    if (authed && to.path === '/landing') return '/landing-logged';
+    return true;
   });
 
   // enable HMR for it

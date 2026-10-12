@@ -1,156 +1,70 @@
 <template>
-  <!-- TODO: replace style="height: 83vh;" with custom class that sets that div to 83vh - it does 83% of viewport height -->
-  <div style="height: 83vh;">
-    <q-scroll-area class="fit q-pa-md">
-      <q-chat-message
-      name="me"
-      avatar="https://cdn.quasar.dev/img/avatar1.jpg"
-      :text="['hey, how are you?']"
-      stamp="7 minutes ago"
-      sent
-      bg-color="amber-7"
-    />
-    <q-chat-message
-      name="Jane"
-      avatar="https://cdn.quasar.dev/img/avatar5.jpg"
-      :text="['doing fine, how r you?']"
-      stamp="4 minutes ago"
-      text-color="white"
-      bg-color="primary"
-    /><q-chat-message
-      name="me"
-      avatar="https://cdn.quasar.dev/img/avatar1.jpg"
-      :text="['hey, how are you?']"
-      stamp="7 minutes ago"
-      sent
-      bg-color="amber-7"
-    />
-    <q-chat-message
-      name="Jane"
-      avatar="https://cdn.quasar.dev/img/avatar5.jpg"
-      :text="['doing fine, how r you?']"
-      stamp="4 minutes ago"
-      text-color="white"
-      bg-color="primary"
-    />      
-    <q-chat-message
-      name="me"
-      avatar="https://cdn.quasar.dev/img/avatar3.jpg"
-      :text="['hey, how are you?']"
-      stamp="7 minutes ago"
-      sent
-      bg-color="amber-7"
-    />
-    <q-chat-message
-      name="Jane"
-      avatar="https://cdn.quasar.dev/img/avatar5.jpg"
-      :text="[
-        'doing fine, how r you?',
-        'I just feel like typing a really, really, REALLY long message to annoy you...'
-      ]"
-      size="6"
-      stamp="4 minutes ago"
-      text-color="white"
-      bg-color="primary"
-    />
-    <q-chat-message
-      name="Jane"
-      avatar="https://cdn.quasar.dev/img/avatar5.jpg"
-      :text="['Did it work?']"
-      stamp="1 minutes ago"
-      size="8"
-      text-color="white"
-      bg-color="primary"
-    />
+  <div v-if="activeChannel" :key="activeChannel.id" class="absolute-full">
+    <q-scroll-area ref="area" class="fit q-pa-md">
+      <!-- infinite scroll smerom hore (história), renderuje sa iba okno správ -->
+      <q-infinite-scroll reverse :offset="150" :scroll-target="target" @load="onLoad">
+        <template #loading>
+          <div class="row justify-center q-my-md"><q-spinner color="primary" size="32px" /></div>
+        </template>
+        <div v-if="!hasMore" class="text-center text-caption text-grey q-my-md">
+          Start of #{{ activeChannel.name }} history
+        </div>
 
-    <q-chat-message
-      name="me"
-      avatar="https://cdn.quasar.dev/img/avatar3.jpg"
-      stamp="7 minutes ago"
-      sent
-      text-color="white"
-      bg-color="primary"
-    >
-      <div> Hey there! </div>
-
-      <div>
-        Have you seen Quasar?
-      </div>
-    </q-chat-message>
-
-    <q-chat-message
-      name="Jane"
-      avatar="https://cdn.quasar.dev/img/avatar5.jpg"
-      bg-color="amber"
-    >
-      <q-spinner-dots size="2rem" />
-    </q-chat-message>
-      
-      
-      
-      
-      <!-- Later do it like this -->
-      <!-- <div v-for="(msg, index) in messages" :key="index"> -->
-        <!-- <q-chat-message
-          :name="msg.name"
-          :avatar="msg.avatar"
-          :text="[msg.text]"
-          :stamp="msg.stamp"
-          :sent="msg.sent"
-          :bg-color="msg.sent ? 'primary' : 'grey-4'"
-          :text-color="msg.sent ? 'white' : 'black'"
-        /> -->
-      <!-- </div> -->
+        <q-chat-message
+          v-for="m in visible"
+          :key="m.id"
+          :name="userById(m.authorId)?.nickName"
+          :avatar="avatar(m.authorId)"
+          :stamp="date.formatDate(m.createdAt, 'D.M. HH:mm')"
+          :sent="m.authorId === me?.id"
+          :text-color="m.authorId === me?.id ? undefined : 'white'"
+          :bg-color="bubble(m)"
+        >
+          <q-icon v-if="isForMe(m)" name="alternate_email" size="xs" class="q-mr-xs"><q-tooltip>Addressed to you</q-tooltip></q-icon>
+          <template v-for="(p, i) in parts(m.text)" :key="i"><b v-if="p.mention">{{ p.t }}</b><span v-else>{{ p.t }}</span></template>
+        </q-chat-message>
+      </q-infinite-scroll>
     </q-scroll-area>
   </div>
 </template>
 
 <script setup lang="ts">
-// import { ref } from 'vue';
+import { ref, computed, watch, nextTick } from 'vue';
+import { date, type QScrollArea } from 'quasar';
+import { useChat, type Message } from '@/stores/chat';
 
-// Later do it like this:
-// const messages = ref([
-//   {
-//     name: 'Server Admin',
-//     avatar: 'https://cdn.quasar.dev/img/avatar1.jpg',
-//     text: 'INCOMING MESSAGE - Vítajte na serveri!',
-//     stamp: '14:00',
-//     sent: false, // Doľava
-//   },
-//   {
-//     name: 'Ja',
-//     avatar: 'https://cdn.quasar.dev/img/avatar2.jpg',
-//     text: 'MY MESSAGE - Ahoj, diki!',
-//     stamp: '14:01',
-//     sent: true, // Doprava
-//   },
-//   {
-//     name: 'Server Admin',
-//     avatar: 'https://cdn.quasar.dev/img/avatar1.jpg',
-//     text: 'INCOMING MESSAGE - Ako ti môžem pomôcť?',
-//     stamp: '14:02',
-//     sent: false,
-//   },
-//   {
-//     name: 'Ja',
-//     avatar: 'https://cdn.quasar.dev/img/avatar2.jpg',
-//     text: 'MY MESSAGE - Skúšam Quasar chat rozhranie.',
-//     stamp: '14:03',
-//     sent: true,
-//   },
-//   {
-//     name: 'Server Admin',
-//     avatar: 'https://cdn.quasar.dev/img/avatar1.jpg',
-//     text: 'INCOMING MESSAGE - Vítajte na serveri!',
-//     stamp: '14:00',
-//     sent: false, // Doľava
-//   },
-//   {
-//     name: 'Ja',
-//     avatar: 'https://cdn.quasar.dev/img/avatar2.jpg',
-//     text: 'MY MESSAGE - Ahoj, diki!',
-//     stamp: '14:01',
-//     sent: true, // Doprava
-//   },
-// ]);
+const PAGE = 25;
+const { me, activeChannel, channelMessages, userById } = useChat();
+const area = ref<QScrollArea | null>(null);
+const target = ref<Element | undefined>(undefined);
+const shown = ref(PAGE);
+
+const all = computed(() => (activeChannel.value ? channelMessages(activeChannel.value.id) : []));
+const visible = computed(() => all.value.slice(-shown.value));
+const hasMore = computed(() => shown.value < all.value.length);
+
+const avatar = (id: number) => `https://cdn.quasar.dev/img/avatar${(id % 6) + 1}.jpg`;
+const isForMe = (m: Message) => m.mentions.includes(me.value?.id ?? -1) && m.authorId !== me.value?.id;
+// vaše farby: moje = amber-7, ostatné = primary; adresované mne = zvýraznené červenou
+const bubble = (m: Message) => (isForMe(m) ? 'red-5' : m.authorId === me.value?.id ? 'amber-7' : 'primary');
+const parts = (t: string) => t.split(/(@\w+)/g).filter(Boolean).map((s) => ({ t: s, mention: /^@\w+$/.test(s) }));
+
+function onLoad(_: number, done: (stop?: boolean) => void) {
+  setTimeout(() => { if (hasMore.value) shown.value += PAGE; done(!hasMore.value); }, 400); // simulovaná latencia servera
+}
+function toBottom() {
+  void nextTick(() => { const el = area.value?.getScrollTarget(); if (el) el.scrollTop = el.scrollHeight; });
+}
+
+watch(() => activeChannel.value?.id, async () => {
+  shown.value = PAGE;
+  await nextTick();
+  target.value = area.value?.getScrollTarget();
+  toBottom();
+}, { immediate: true, flush: 'post' });
+
+watch(() => all.value.length, () => {   // nová správa -> posun dole, ak je používateľ pri konci alebo píše sám
+  const el = area.value?.getScrollTarget(); const last = all.value[all.value.length - 1];
+  if (el && (el.scrollHeight - el.scrollTop - el.clientHeight < 200 || last?.authorId === me.value?.id)) toBottom();
+});
 </script>

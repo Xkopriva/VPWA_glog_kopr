@@ -1,26 +1,18 @@
 <template>
-  <q-page class="row">
-    <!-- Left side of main block -->
-    <div class="col-2 full-height">
-      <SideBar />
-    </div>
-
-    <!-- Right side of main block -->
-    <div class="col-10 column full-height justify-between">
-      <div class="col relative-position">
-        <ChattingWindow />
-      </div>
-
-      <!-- CommandLine at the bottom -->
-      <div>
-        <CommandLine />
-      </div>
-    </div>
+  <q-page :style-fn="(offset: number) => ({ height: `calc(100vh - ${offset}px)` })" class="relative-position">
+    <ChattingWindow />
   </q-page>
 </template>
 
 <script setup lang="ts">
-import SideBar from '../../components/SideBar.vue';
-import CommandLine from '../../components/CommandLine.vue';
+import { watch, onBeforeUnmount } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import ChattingWindow from '@/components/ChattingWindow.vue';
+import { useChat } from '@/stores/chat';
+
+const { activeChannel, setActive } = useChat(); const route = useRoute(); const router = useRouter();
+watch(() => route.query.c, (id) => setActive(Number(id)), { immediate: true });
+// kanál zanikol / používateľ bol vyhodený / opustil kanál -> návrat na prehľad
+watch(activeChannel, (c) => { if (!c) void router.replace('/landing-logged'); }, { immediate: true });
+onBeforeUnmount(() => setActive(null));
 </script>
