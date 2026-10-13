@@ -4,23 +4,23 @@
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Kanály" class="lt-md" @click="drawer = !drawer" />
 
-        <q-toolbar-title>
-          IMAGE Flack
+
+        <q-toolbar-title class="row items-center">
+          <!-- logo and Flack text will disappear with the drawer (same breakpoint) -->
+          <span class="gt-sm row items-center">
+            <img
+              alt="Flack logo"
+              src="~@/assets/OnlyLogo.png"
+              style="height: 32px; width: auto;"
+              class="q-mr-sm"
+            />
+            <span class="text-bold">Flack</span>
+          </span>
+          
           <span v-if="activeChannel" class="q-ml-md text-weight-light"># {{ activeChannel.name }}</span>
         </q-toolbar-title>
-
-        <!-- Dark Mode Toggle Button -->
-        <q-btn
-          class="q-mx-md"
-          :color="$q.dark.isActive ? 'amber' : 'dark'"
-          :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
-          :label="$q.screen.gt.sm ? ($q.dark.isActive ? 'Switch to Light Mode' : 'Switch to Dark Mode') : undefined"
-          no-caps
-          @click="$q.dark.toggle()"
-        />
+        
         <div class="gt-md">Quasar v{{ $q.version }}</div>
-        <!-- TODO: theme toggle was already impelemented,
-        decide if you want the button up or this component, i think the component is better -->
         <theme-toggle />
 
         <template v-if="me">
