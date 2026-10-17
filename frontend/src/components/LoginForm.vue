@@ -12,7 +12,7 @@
           <div class="text-caption text-grey">Demo: <b>jana</b> / <b>1234</b></div>
 
           <div class="row flex-center q-mt-lg">
-            <q-btn type="submit" label="LOGIN" color="primary" size="lg" class="full-width" />
+            <q-btn type="submit" label="LOGIN" color="yellow-8" size="lg" class="full-width" />
           </div>
         </q-form>
       </q-card-section>

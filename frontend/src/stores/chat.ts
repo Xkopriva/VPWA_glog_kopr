@@ -54,7 +54,11 @@ state.channels.push(
   mkCh(4, 'archiv', 'public', 2, [1, 2], t0 - 27 * DAY),   // o 3 dni zanikne (30-dňová neaktivita)
   mkCh(5, 'design', 'private', 4, [4, 3]),                  // pozvánka pre používateľa jana
 );
-const phrases = ['Adamko si génius', 'VPWA je skvelý predmet', 'pushol som github', 'niekto eat?'];
+const phrases = 
+ ['Adamko si génius feugiat nulla. In tincidunt, est nec blandit sollicitudin, mauris diam congue felis, quis pharetra diam urna ac nibh. Vivamus vestibulum, ', 
+  'VPWA je skvelý predmet eu augue elit. Nullam bibendum magna ac erat facilisis, non feugiat quam iaculis. Nunc sem enim, mattis non lacus efficitur, venenatis ', 
+  'pushol som github sed gravida leo. Phasellus ultricies justo et lorem egestas, at malesuada mi ornare. Pellentesque tempus nisi mi. Proin vel lectus nibh. ', 
+  'niekto eat? sollicitudin, et hendrerit risus dignissim. Proin ullamcorper enim at posuere iaculis. Etiam porttitor eros pulvinar elit vehicula, non '];
 function gen(channelId: number, authors: number[], count: number, end = t0) {
   for (let i = 0; i < count; i++) {
     const a = authors[i % authors.length]!;

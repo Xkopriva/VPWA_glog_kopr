@@ -17,7 +17,7 @@
             :rules="[req, (v: string) => v.length >= 4 || 'At least 4 characters']" />
 
           <div class="row flex-center q-mt-lg">
-            <q-btn type="submit" label="REGISTER" color="primary" size="lg" class="full-width" />
+            <q-btn type="submit" label="REGISTER" color="yellow-8" size="lg" class="full-width" />
           </div>
         </q-form>
       </q-card-section>

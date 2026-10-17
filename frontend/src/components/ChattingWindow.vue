@@ -17,11 +17,14 @@
           :avatar="avatar(m.authorId)"
           :stamp="date.formatDate(m.createdAt, 'D.M. HH:mm')"
           :sent="m.authorId === me?.id"
-          :text-color="m.authorId === me?.id ? undefined : 'white'"
+          :text-color="m.authorId === me?.id ? 'white' : 'white'"
           :bg-color="bubble(m)"
         >
-          <q-icon v-if="isForMe(m)" name="alternate_email" size="xs" class="q-mr-xs"><q-tooltip>Addressed to you</q-tooltip></q-icon>
-          <template v-for="(p, i) in parts(m.text)" :key="i"><b v-if="p.mention">{{ p.t }}</b><span v-else>{{ p.t }}</span></template>
+          <!-- fix for messages with mentions -->
+          <div class="row items-center no-wrap">
+            <span v-html="formattedText(m.text)" />
+          </div>
+
         </q-chat-message>
       </q-infinite-scroll>
     </q-scroll-area>
@@ -46,8 +49,12 @@ const hasMore = computed(() => shown.value < all.value.length);
 const avatar = (id: number) => `https://cdn.quasar.dev/img/avatar${(id % 6) + 1}.jpg`;
 const isForMe = (m: Message) => m.mentions.includes(me.value?.id ?? -1) && m.authorId !== me.value?.id;
 // vaše farby: moje = amber-7, ostatné = primary; adresované mne = zvýraznené červenou
-const bubble = (m: Message) => (isForMe(m) ? 'red-5' : m.authorId === me.value?.id ? 'amber-7' : 'primary');
-const parts = (t: string) => t.split(/(@\w+)/g).filter(Boolean).map((s) => ({ t: s, mention: /^@\w+$/.test(s) }));
+const bubble = (m: Message) => (isForMe(m) ? 'cyan-8' : m.authorId === me.value?.id ? 'yellow-8' : 'primary');
+
+// Pomocná funkcia na sformátovanie mentionov do jedného HTML stringu
+function formattedText(text: string): string {
+  return text.replace(/(@\w+)/g, '<b>$1</b>');
+}
 
 function onLoad(_: number, done: (stop?: boolean) => void) {
   setTimeout(() => { if (hasMore.value) shown.value += PAGE; done(!hasMore.value); }, 400); // simulovaná latencia servera

@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar>
+      <q-toolbar class="bg-secondary">
         <q-btn flat dense round icon="menu" aria-label="Kanály" class="lt-md" @click="drawer = !drawer" />
 
 
@@ -31,7 +31,14 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="drawer" show-if-above bordered :width="300" :breakpoint="1024">
+    <q-drawer
+      v-if="me"
+      v-model="drawer"
+      show-if-above
+      bordered
+      :width="300"
+      :breakpoint="1024"
+    >
       <SideBar />
     </q-drawer>
 
