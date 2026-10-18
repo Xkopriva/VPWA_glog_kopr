@@ -1,6 +1,8 @@
 <template>
-  <q-page :style-fn="(offset: number) => ({ height: `calc(100vh - ${offset}px)` })" class="relative-position">
-    <ChattingWindow />
+  <q-page :style-fn="(offset: number) => ({ height: `calc(100vh - ${offset}px)` })" style="padding: 0 8px 8px 8px">
+    <div class="panel fit relative-position" style="overflow: hidden">
+      <ChattingWindow />
+    </div>
   </q-page>
 </template>
 

@@ -1,21 +1,23 @@
 <template>
-  <div class="q-pa-sm">
+  <div class="q-px-sm q-pb-sm">
     <!-- našepkávanie príkazov -->
-    <q-list v-if="hints.length" dense bordered class="rounded-borders q-mb-sm">
-      <q-item v-for="h in hints" :key="h.cmd" clickable @click="text = h.cmd + ' '; input?.focus()">
-        <q-item-section>
-          <q-item-label class="text-weight-medium">{{ h.usage }}</q-item-label>
-          <q-item-label caption>{{ h.desc }}</q-item-label>
-        </q-item-section>
-      </q-item>
-    </q-list>
+    <div v-if="hints.length" class="panel q-pa-xs q-mb-sm">
+      <q-list dense>
+        <q-item v-for="h in hints" :key="h.cmd" clickable class="ch-row" style="min-height: 44px" @click="text = h.cmd + ' '; input?.focus()">
+          <q-item-section>
+            <q-item-label class="text-weight-medium">{{ h.usage }}</q-item-label>
+            <q-item-label caption>{{ h.desc }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </div>
 
-    <q-input ref="input" v-model="text" outlined :disable="!me" :label="label"
-      @update:model-value="(v) => setTyping(String(v ?? ''))" @keyup.enter="submit">
-      <template #after>
-        <q-btn round flat color="primary" icon="send" :disable="!me" @click="submit" />
-      </template>
-    </q-input>
+    <div class="panel row items-center no-wrap q-pl-md q-pr-sm q-py-xs">
+      <q-icon name="terminal" class="dim q-mr-sm" />
+      <q-input ref="input" v-model="text" class="col" borderless dense :disable="!me" :placeholder="label"
+        @update:model-value="(v) => setTyping(String(v ?? ''))" @keyup.enter="submit" />
+      <q-btn round unelevated color="primary" icon="send" :disable="!me || !text.trim()" @click="submit" />
+    </div>
   </div>
 </template>
 
@@ -31,7 +33,7 @@ const text = ref('');
 const input = ref<QInput | null>(null);
 
 const label = computed(() => !me.value ? 'Log in to send messages and commands'
-  : activeChannel.value ? `Message to #${activeChannel.value.name} – @nick to address, /command` : 'Command line, e.g. /join general');
+  : activeChannel.value ? `Message #${activeChannel.value.name} – @nick to address, /command` : 'Command line, e.g. /join general');
 const hints = computed(() => (text.value.startsWith('/') && !text.value.includes(' ')
   ? COMMANDS.filter((c) => c.cmd.startsWith(text.value.toLowerCase())) : []));
 

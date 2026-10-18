@@ -1,13 +1,18 @@
 <template>
   <!-- /list: členovia kanála -->
   <q-dialog v-model="ui.membersDialog">
-    <q-card style="min-width: 320px">
+    <q-card style="min-width: 340px" class="q-pa-sm">
       <q-card-section class="text-h6">Členovia #{{ activeChannel?.name }}</q-card-section>
       <q-list v-if="activeChannel">
-        <q-item v-for="id in activeChannel.members" :key="id">
-          <q-item-section avatar><q-icon name="circle" :color="color[userById(id)!.status]" size="xs" /></q-item-section>
+        <q-item v-for="id in activeChannel.members" :key="id" class="ch-row">
+          <q-item-section avatar>
+            <div class="relative-position">
+              <q-avatar size="38px"><img :src="`https://cdn.quasar.dev/img/avatar${(id % 6) + 1}.jpg`" /></q-avatar>
+              <q-badge floating rounded :color="color[userById(id)!.status]" style="min-width: 12px; min-height: 12px; padding: 0" />
+            </div>
+          </q-item-section>
           <q-item-section>{{ userById(id)!.firstName }} {{ userById(id)!.lastName }}<q-item-label caption>@{{ userById(id)!.nickName }} · {{ userById(id)!.status }}</q-item-label></q-item-section>
-          <q-item-section v-if="id === activeChannel.adminId" side><q-badge color="amber" text-color="dark" label="správca" /></q-item-section>
+          <q-item-section v-if="id === activeChannel.adminId" side><q-badge rounded color="primary" label="správca" class="q-px-sm" /></q-item-section>
         </q-item>
       </q-list>
       <q-card-actions align="right"><q-btn flat label="Zavrieť" v-close-popup /></q-card-actions>
@@ -16,7 +21,7 @@
 
   <!-- nastavenia -->
   <q-dialog v-model="ui.settingsDialog">
-    <q-card style="min-width: 320px">
+    <q-card style="min-width: 340px" class="q-pa-sm">
       <q-card-section class="text-h6">Nastavenia</q-card-section>
       <q-card-section>
         <q-toggle v-model="state.mentionsOnly" label="Notifikácie iba pre správy adresované mne (@nick)" />
@@ -29,9 +34,9 @@
 
   <!-- živý náhľad rozpísanej správy -->
   <q-dialog :model-value="ui.liveUserId !== null" @update:model-value="ui.liveUserId = null">
-    <q-card style="min-width: 320px">
+    <q-card style="min-width: 340px" class="q-pa-sm">
       <q-card-section class="text-h6">{{ ui.liveUserId ? userById(ui.liveUserId)?.nickName : '' }} práve píše…</q-card-section>
-      <q-card-section class="bg-grey-3 text-dark q-ma-md rounded-borders" style="min-height: 60px">{{ liveDraft || '(momentálne nepíše)' }}</q-card-section>
+      <q-card-section class="soft q-ma-md q-pa-md" style="min-height: 60px">{{ liveDraft || '(momentálne nepíše)' }}</q-card-section>
       <q-card-actions align="right"><q-btn flat label="Zavrieť" v-close-popup /></q-card-actions>
     </q-card>
   </q-dialog>
