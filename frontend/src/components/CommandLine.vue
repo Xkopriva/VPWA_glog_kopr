@@ -37,9 +37,10 @@ const label = computed(() => !me.value ? 'Log in to send messages and commands'
 const hints = computed(() => (text.value.startsWith('/') && !text.value.includes(' ')
   ? COMMANDS.filter((c) => c.cmd.startsWith(text.value.toLowerCase())) : []));
 
-function submit() {
+// handles command line input submission asynchronously
+async function submit() {
   if (!text.value.trim()) return;
-  const r = execute(text.value);
+  const r = await execute(text.value);
   if (r.message) Notify.create({ type: r.ok ? 'positive' : 'negative', message: r.message, position: 'top' });
   if (r.ok) {
     text.value = '';

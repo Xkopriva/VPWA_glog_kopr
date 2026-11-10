@@ -4,15 +4,15 @@
     <q-card style="min-width: 340px" class="q-pa-sm">
       <q-card-section class="text-h6">Členovia #{{ activeChannel?.name }}</q-card-section>
       <q-list v-if="activeChannel">
-        <q-item v-for="id in activeChannel.members" :key="id" class="ch-row">
+        <q-item v-for="id in (activeChannel?.members ?? [])" :key="id" class="ch-row">
           <q-item-section avatar>
             <div class="relative-position">
               <q-avatar size="38px"><img :src="`https://cdn.quasar.dev/img/avatar${(id % 6) + 1}.jpg`" /></q-avatar>
-              <q-badge floating rounded :color="color[userById(id)!.status]" style="min-width: 12px; min-height: 12px; padding: 0" />
+              <q-badge floating rounded :color="color[userById(id)?.status ?? 'offline']" style="min-width: 12px; min-height: 12px; padding: 0" />
             </div>
           </q-item-section>
-          <q-item-section>{{ userById(id)!.firstName }} {{ userById(id)!.lastName }}<q-item-label caption>@{{ userById(id)!.nickName }} · {{ userById(id)!.status }}</q-item-label></q-item-section>
-          <q-item-section v-if="id === activeChannel.adminId" side><q-badge rounded color="primary" label="správca" class="q-px-sm" /></q-item-section>
+          <q-item-section>{{ userById(id)?.firstName }} {{ userById(id)?.lastName }}<q-item-label caption>@{{ userById(id)?.nickName }} · {{ userById(id)?.status }}</q-item-label></q-item-section>
+          <q-item-section v-if="id === activeChannel?.adminId" side><q-badge rounded color="primary" label="správca" class="q-px-sm" /></q-item-section>
         </q-item>
       </q-list>
       <q-card-actions align="right"><q-btn flat label="Zavrieť" v-close-popup /></q-card-actions>
@@ -47,5 +47,5 @@ import { computed } from 'vue';
 import { useChat, ui } from '@/stores/chat';
 const { state, activeChannel, userById, requestNotifyPermission } = useChat();
 const color = { online: 'positive', dnd: 'negative', offline: 'grey' } as const;
-const liveDraft = computed(() => (activeChannel.value && ui.liveUserId ? state.typing[activeChannel.value.id]?.[ui.liveUserId] : ''));
+const liveDraft = computed(() => (activeChannel.value?.id && ui.liveUserId ? state.typing[activeChannel.value.id]?.[ui.liveUserId] : ''));
 </script>

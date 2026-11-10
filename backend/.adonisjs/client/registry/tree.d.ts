@@ -29,4 +29,19 @@ export interface ApiDefinition {
       show: typeof routes['users.users.show']
     }
   }
+  channels: {
+    channels: {
+      index: typeof routes['channels.channels.index']
+      store: typeof routes['channels.channels.store']
+      prune: typeof routes['channels.channels.prune']
+      show: typeof routes['channels.channels.show']
+      destroy: typeof routes['channels.channels.destroy']
+      leave: typeof routes['channels.channels.leave']
+      invite: typeof routes['channels.channels.invite']
+      acceptInvite: typeof routes['channels.channels.accept_invite']
+      declineInvite: typeof routes['channels.channels.decline_invite']
+      revoke: typeof routes['channels.channels.revoke']
+      kick: typeof routes['channels.channels.kick']
+    }
+  }
 }

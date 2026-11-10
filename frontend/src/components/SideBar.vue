@@ -75,7 +75,7 @@
             <q-item-section>
               <q-item-label class="text-weight-medium ellipsis">{{ c.name }}</q-item-label>
               <q-item-label v-if="daysLeft(c) <= 7" caption class="text-negative">expires in {{ daysLeft(c) }} d (inactive)</q-item-label>
-              <q-item-label v-else caption>{{ c.members.length }} members<template v-if="isAdmin(c)"> · Admin</template></q-item-label>
+              <q-item-label v-else caption>{{ (c.members?.length ?? 0) }} members<template v-if="isAdmin(c)"> · Admin</template></q-item-label>
             </q-item-section>
             <q-item-section side><q-badge v-if="state.unread[c.id]" color="negative" rounded :label="state.unread[c.id]" /></q-item-section>
             <q-item-section side>
@@ -97,7 +97,7 @@
           <q-expansion-item v-if="listType === 'public' && discoverable.length" label="Discover public channels" dense-toggle class="q-mt-sm" header-class="text-weight-medium">
             <q-item v-for="c in discoverable" :key="c.id" class="ch-row">
               <q-item-section avatar style="min-width: 0; padding-right: 12px"><ChannelTile :name="c.name" :type="c.type" :size="36" /></q-item-section>
-              <q-item-section>{{ c.name }}<q-item-label caption>{{ c.members.length }} members</q-item-label></q-item-section>
+              <q-item-section>{{ c.name }}<q-item-label caption>{{ (c.members?.length ?? 0) }} members</q-item-label></q-item-section>
               <q-item-section side><q-btn unelevated dense no-caps color="primary" label="Join" class="q-px-md" @click="run(`/join ${c.name}`)" /></q-item-section>
             </q-item>
           </q-expansion-item>
@@ -149,20 +149,22 @@ const createDlg = ref(false);
 const newName = ref('');
 const newPrivate = ref(false);
 
-function handle(r: Result) {
-  if (r.message) Notify.create({ type: r.ok ? 'positive' : 'negative', message: r.message });
-  if (r.ok && r.goTo) void router.push({ path: '/chatting', query: { c: r.goTo } });
+// handles command and action results asynchronously
+async function handle(r: Result | Promise<Result>) {
+  const res = await r
+  if (res.message) Notify.create({ type: res.ok ? 'positive' : 'negative', message: res.message })
+  if (res.ok && res.goTo) void router.push({ path: '/chatting', query: { c: res.goTo } })
 }
-const run = (cmd: string) => handle(execute(cmd));
-const accept = (id: number) => handle(acceptInvite(id));
-function create() {
-  if (!/^[\w-]{2,24}$/.test(newName.value)) return;
-  handle(execute(`/join ${newName.value}${newPrivate.value ? ' private' : ''}`));
-  createDlg.value = false; newName.value = ''; newPrivate.value = false;
+const run = (cmd: string) => void handle(execute(cmd))
+const accept = (id: number) => void handle(acceptInvite(id))
+async function create() {
+  if (!/^[\w-]{2,24}$/.test(newName.value)) return
+  await handle(execute(`/join ${newName.value}${newPrivate.value ? ' private' : ''}`))
+  createDlg.value = false; newName.value = ''; newPrivate.value = false
 }
-const confirm = (title: string, message: string, fn: () => Result) => $q.dialog({ title, message, cancel: true }).onOk(() => handle(fn()));
-const leave = (c: Channel) => confirm('Leave channel', isAdmin(c) ? 'You are the admin – the channel will be deleted.' : `Leave #${c.name}?`, () => cancelMembership(c.id));
-const remove = (c: Channel) => confirm('Delete channel', `Delete #${c.name}? Messages will be lost.`, () => quitChannel(c.id));
+const confirm = (title: string, message: string, fn: () => Result | Promise<Result>) => $q.dialog({ title, message, cancel: true }).onOk(() => void handle(fn()))
+const leave = (c: Channel) => confirm('Leave channel', isAdmin(c) ? 'You are the admin – the channel will be deleted.' : `Leave #${c.name}?`, () => cancelMembership(c.id))
+const remove = (c: Channel) => confirm('Delete channel', `Delete #${c.name}? Messages will be lost.`, () => quitChannel(c.id))
 </script>
 
 <style scoped>

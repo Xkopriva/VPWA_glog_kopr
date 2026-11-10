@@ -5,6 +5,7 @@ const NewAccountController = () => import('#controllers/new_account_controller')
 const AccessTokensController = () => import('#controllers/access_tokens_controller')
 const ProfileController = () => import('#controllers/profile_controller')
 const UsersController = () => import('#controllers/users_controller')
+const ChannelsController = () => import('#controllers/channels_controller')
 
 // registers base root route
 router.get('/', () => {
@@ -44,6 +45,25 @@ router
       })
       .prefix('users')
       .as('users')
+      .use(middleware.auth())
+
+    // channel resources routes
+    router
+      .group(() => {
+        router.get('/', [ChannelsController, 'index'])
+        router.post('/', [ChannelsController, 'store'])
+        router.delete('/prune', [ChannelsController, 'prune'])
+        router.get('/:id', [ChannelsController, 'show'])
+        router.delete('/:id', [ChannelsController, 'destroy'])
+        router.delete('/:id/leave', [ChannelsController, 'leave'])
+        router.post('/:id/invite', [ChannelsController, 'invite'])
+        router.post('/:id/accept-invite', [ChannelsController, 'acceptInvite'])
+        router.delete('/:id/decline-invite', [ChannelsController, 'declineInvite'])
+        router.delete('/:id/members/:userId', [ChannelsController, 'revoke'])
+        router.post('/:id/kick', [ChannelsController, 'kick'])
+      })
+      .prefix('channels')
+      .as('channels')
       .use(middleware.auth())
   })
   .prefix('/api/v1')

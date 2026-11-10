@@ -13,21 +13,40 @@ export type ScannedRoutes = {
     'profile.access_tokens.destroy': { paramsTuple?: []; params?: {} }
     'users.users.index': { paramsTuple?: []; params?: {} }
     'users.users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.index': { paramsTuple?: []; params?: {} }
+    'channels.channels.store': { paramsTuple?: []; params?: {} }
+    'channels.channels.prune': { paramsTuple?: []; params?: {} }
+    'channels.channels.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.leave': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.invite': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.accept_invite': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.decline_invite': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.revoke': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
+    'channels.channels.kick': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
     'users.users.index': { paramsTuple?: []; params?: {} }
     'users.users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.index': { paramsTuple?: []; params?: {} }
+    'channels.channels.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   HEAD: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
     'users.users.index': { paramsTuple?: []; params?: {} }
     'users.users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.index': { paramsTuple?: []; params?: {} }
+    'channels.channels.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   POST: {
     'auth.new_account.store': { paramsTuple?: []; params?: {} }
     'auth.access_tokens.store': { paramsTuple?: []; params?: {} }
     'profile.access_tokens.destroy': { paramsTuple?: []; params?: {} }
+    'channels.channels.store': { paramsTuple?: []; params?: {} }
+    'channels.channels.invite': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.accept_invite': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.kick': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   PATCH: {
     'profile.users.update': { paramsTuple?: []; params?: {} }
@@ -35,6 +54,11 @@ export type ScannedRoutes = {
   }
   DELETE: {
     'profile.users.destroy': { paramsTuple?: []; params?: {} }
+    'channels.channels.prune': { paramsTuple?: []; params?: {} }
+    'channels.channels.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.leave': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.decline_invite': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.channels.revoke': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {
