@@ -1,5 +1,6 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import db from '@adonisjs/lucid/services/db'
+import hash from '@adonisjs/core/services/hash'
 
 export default class extends BaseSeeder {
   async run() {
@@ -9,7 +10,10 @@ export default class extends BaseSeeder {
                channel_users, message_mentions, messages, channels, users CASCADE;
     `)
 
-    // inserts users data
+    //generates valid hash for test password
+    const hashedPassword = await hash.make('1234')
+
+    //inserts users data with hashed password
     await db.table('users').multiInsert([
       {
         user_id: 1,
@@ -17,7 +21,7 @@ export default class extends BaseSeeder {
         last_name: 'Mrkvicka',
         nick_name: 'jozko',
         email: 'jozko@flack.sk',
-        password: '$2b$10$fakehash01',
+        password: hashedPassword,
         status: 'online',
         only_mentions: false,
       },
@@ -27,7 +31,7 @@ export default class extends BaseSeeder {
         last_name: 'Novakova',
         nick_name: 'anka',
         email: 'anka@flack.sk',
-        password: '$2b$10$fakehash02',
+        password: hashedPassword,
         status: 'online',
         only_mentions: false,
       },
@@ -37,7 +41,7 @@ export default class extends BaseSeeder {
         last_name: 'Kovac',
         nick_name: 'peto',
         email: 'peto@flack.sk',
-        password: '$2b$10$fakehash03',
+        password: hashedPassword,
         status: 'dnd',
         only_mentions: true,
       },
@@ -47,7 +51,7 @@ export default class extends BaseSeeder {
         last_name: 'Horvathova',
         nick_name: 'jana',
         email: 'jana@flack.sk',
-        password: '$2b$10$fakehash04',
+        password: hashedPassword,
         status: 'online',
         only_mentions: false,
       },
@@ -57,7 +61,7 @@ export default class extends BaseSeeder {
         last_name: 'Szabo',
         nick_name: 'martin',
         email: 'martin@flack.sk',
-        password: '$2b$10$fakehash05',
+        password: hashedPassword,
         status: 'offline',
         only_mentions: false,
       },
@@ -67,7 +71,7 @@ export default class extends BaseSeeder {
         last_name: 'Balaz',
         nick_name: 'lucia',
         email: 'lucia@flack.sk',
-        password: '$2b$10$fakehash06',
+        password: hashedPassword,
         status: 'online',
         only_mentions: true,
       },
@@ -77,7 +81,7 @@ export default class extends BaseSeeder {
         last_name: 'Kral',
         nick_name: 'tomas',
         email: 'tomas@flack.sk',
-        password: '$2b$10$fakehash07',
+        password: hashedPassword,
         status: 'dnd',
         only_mentions: false,
       },
@@ -87,7 +91,7 @@ export default class extends BaseSeeder {
         last_name: 'Vargova',
         nick_name: 'eva',
         email: 'eva@flack.sk',
-        password: '$2b$10$fakehash08',
+        password: hashedPassword,
         status: 'offline',
         only_mentions: false,
       },
@@ -97,7 +101,7 @@ export default class extends BaseSeeder {
         last_name: 'Toth',
         nick_name: 'michal',
         email: 'michal@flack.sk',
-        password: '$2b$10$fakehash09',
+        password: hashedPassword,
         status: 'online',
         only_mentions: false,
       },
@@ -107,13 +111,13 @@ export default class extends BaseSeeder {
         last_name: 'Polakova',
         nick_name: 'zuzka',
         email: 'zuzka@flack.sk',
-        password: '$2b$10$fakehash10',
+        password: hashedPassword,
         status: 'offline',
         only_mentions: true,
       },
     ])
 
-    // inserts channels data
+    //inserts channels data
     await db.table('channels').multiInsert([
       { channel_id: 1, admin_id: 1, name: 'general', type: 'public' },
       { channel_id: 2, admin_id: 2, name: 'random', type: 'public' },

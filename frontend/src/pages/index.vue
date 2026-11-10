@@ -54,7 +54,11 @@ const { me, logout, init } = useChat();
 const router = useRouter();
 const drawer = ref(false);
 onMounted(init);
-function onLogout() { logout(); void router.push('/landing'); }
+// handles user logout and redirect to landing
+async function onLogout() {
+  await logout()
+  void router.push('/landing')
+}
 </script>
 
 

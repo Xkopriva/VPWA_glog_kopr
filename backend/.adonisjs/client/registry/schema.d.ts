@@ -47,6 +47,45 @@ export interface Registry {
       rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/profile_controller').default['show']>>>
     }
   }
+  'profile.users.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/account/profile'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').updateUserValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').updateUserValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/users_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'profile.users.update_status': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/account/status'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').updateStatusValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').updateStatusValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['updateStatus']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['updateStatus']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/users_controller').default['updateStatus']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'profile.users.destroy': {
+    methods: ["DELETE"]
+    pattern: '/api/v1/account/profile'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['destroy']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/users_controller').default['destroy']>>>
+    }
+  }
   'profile.access_tokens.destroy': {
     methods: ["POST"]
     pattern: '/api/v1/account/logout'
@@ -58,6 +97,32 @@ export interface Registry {
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/access_tokens_controller').default['destroy']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/access_tokens_controller').default['destroy']>>>
       rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/access_tokens_controller').default['destroy']>>>
+    }
+  }
+  'users.users.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/users'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/users_controller').default['index']>>>
+    }
+  }
+  'users.users.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/users/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/users_controller').default['show']>>>
     }
   }
 }

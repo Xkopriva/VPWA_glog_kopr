@@ -34,7 +34,11 @@ import { useRouter } from 'vue-router';
 import { useChat, COMMANDS } from '@/stores/chat';
 const { me, logout } = useChat(); const router = useRouter();
 const greeting = computed(() => { const h = new Date().getHours(); return h < 10 ? 'Dobré ráno' : h < 18 ? 'Dobrý deň' : 'Dobrý večer'; });
-function out() { logout(); void router.push('/landing'); }
+// handles logout from landing page
+async function out() {
+  await logout()
+  void router.push('/landing')
+}
 </script>
 
 <style scoped>

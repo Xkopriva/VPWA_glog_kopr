@@ -26,11 +26,41 @@ const routes = {
     tokens: [[0,"api"],[0,"v1"],[0,"account"],[0,"profile"]],
     types: placeholder as Registry['profile.profile.show']['types'],
   },
+  'profile.users.update': {
+    methods: ["PATCH"],
+    pattern: '/api/v1/account/profile',
+    tokens: [[0,"api"],[0,"v1"],[0,"account"],[0,"profile"]],
+    types: placeholder as Registry['profile.users.update']['types'],
+  },
+  'profile.users.update_status': {
+    methods: ["PATCH"],
+    pattern: '/api/v1/account/status',
+    tokens: [[0,"api"],[0,"v1"],[0,"account"],[0,"status"]],
+    types: placeholder as Registry['profile.users.update_status']['types'],
+  },
+  'profile.users.destroy': {
+    methods: ["DELETE"],
+    pattern: '/api/v1/account/profile',
+    tokens: [[0,"api"],[0,"v1"],[0,"account"],[0,"profile"]],
+    types: placeholder as Registry['profile.users.destroy']['types'],
+  },
   'profile.access_tokens.destroy': {
     methods: ["POST"],
     pattern: '/api/v1/account/logout',
     tokens: [[0,"api"],[0,"v1"],[0,"account"],[0,"logout"]],
     types: placeholder as Registry['profile.access_tokens.destroy']['types'],
+  },
+  'users.users.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/users',
+    tokens: [[0,"api"],[0,"v1"],[0,"users"]],
+    types: placeholder as Registry['users.users.index']['types'],
+  },
+  'users.users.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/users/:id',
+    tokens: [[0,"api"],[0,"v1"],[0,"users"],[1,"id"]],
+    types: placeholder as Registry['users.users.show']['types'],
   },
 } as const satisfies Record<string, AdonisEndpoint>
 

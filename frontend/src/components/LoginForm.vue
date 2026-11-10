@@ -12,7 +12,7 @@
           <div class="text-caption text-grey">Demo: <b>jana</b> / <b>1234</b></div>
 
           <div class="row flex-center q-mt-lg">
-            <q-btn type="submit" label="LOGIN" color="yellow-8" text-color="dark" unelevated no-caps size="lg" class="full-width text-weight-bold" />
+            <q-btn type="submit" label="LOGIN" color="yellow-8" text-color="dark" unelevated no-caps size="lg" :loading="loading" class="full-width text-weight-bold" />
           </div>
         </q-form>
       </q-card-section>
@@ -21,27 +21,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { Notify } from 'quasar';
-import { useChat } from '@/stores/chat';
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { Notify } from 'quasar'
+import { useChat } from '@/stores/chat'
 
-const router = useRouter();
-const { login, requestNotifyPermission } = useChat();
-const req = (v: string) => !!v || 'Required';
+// router and store helpers
+const router = useRouter()
+const { login, requestNotifyPermission } = useChat()
+const req = (v: string) => !!v || 'Required'
 
+const loading = ref(false)
 const form = ref({
   email: '',
   password: '',
-});
+})
 
-function onSubmit() {
-  const r = login(form.value.email, form.value.password);
-  Notify.create({ type: r.ok ? 'positive' : 'negative', message: r.message });
-  if (r.ok) {
-    requestNotifyPermission();
-    // routing na logged-in stránku (index/landing-logged)
-    void router.push('/landing-logged');
+// handles user login submission asynchronously
+async function onSubmit() {
+  loading.value = true
+  try {
+    const r = await login(form.value.email, form.value.password)
+    Notify.create({ type: r.ok ? 'positive' : 'negative', message: r.message })
+    if (r.ok) {
+      requestNotifyPermission()
+      // navigates to logged in view
+      void router.push('/landing-logged')
+    }
+  } finally {
+    loading.value = false
   }
 }
 </script>
