@@ -44,12 +44,12 @@ export class ChannelBanSchema extends BaseModel {
 }
 
 export class ChannelInviteSchema extends BaseModel {
-  static $columns = ['channelId', 'createdAt', 'invitedBy', 'userId'] as const
+  static $columns = ['createdAt', 'channelId', 'invitedBy', 'userId'] as const
   $columns = ChannelInviteSchema.$columns
-  @column()
-  declare channelId: number
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
+  @column()
+  declare channelId: number
   @column()
   declare invitedBy: number
   @column({ isPrimary: true })
@@ -57,12 +57,12 @@ export class ChannelInviteSchema extends BaseModel {
 }
 
 export class ChannelKickVoteSchema extends BaseModel {
-  static $columns = ['channelId', 'createdAt', 'targetId', 'voterId'] as const
+  static $columns = ['createdAt', 'channelId', 'targetId', 'voterId'] as const
   $columns = ChannelKickVoteSchema.$columns
-  @column({ isPrimary: true })
-  declare channelId: number
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare channelId: number
   @column()
   declare targetId: number
   @column()
@@ -81,14 +81,14 @@ export class ChannelUserSchema extends BaseModel {
 }
 
 export class ChannelSchema extends BaseModel {
-  static $columns = ['adminId', 'channelId', 'createdAt', 'lastActivity', 'name', 'type'] as const
+  static $columns = ['adminId', 'createdAt', 'channelId', 'lastActivity', 'name', 'type'] as const
   $columns = ChannelSchema.$columns
   @column()
   declare adminId: number
-  @column({ isPrimary: true })
-  declare channelId: number
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare channelId: number
   @column.dateTime()
   declare lastActivity: DateTime
   @column()
@@ -107,12 +107,12 @@ export class MessageMentionSchema extends BaseModel {
 }
 
 export class MessageSchema extends BaseModel {
-  static $columns = ['channelId', 'createdAt', 'messageId', 'text', 'userId'] as const
+  static $columns = ['createdAt', 'channelId', 'messageId', 'text', 'userId'] as const
   $columns = MessageSchema.$columns
-  @column()
-  declare channelId: number
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
+  @column()
+  declare channelId: number
   @column({ isPrimary: true })
   declare messageId: number
   @column()

@@ -16,6 +16,7 @@ export interface ApiDefinition {
     }
     users: {
       update: typeof routes['profile.users.update']
+      getStatus: typeof routes['profile.users.get_status']
       updateStatus: typeof routes['profile.users.update_status']
       destroy: typeof routes['profile.users.destroy']
     }

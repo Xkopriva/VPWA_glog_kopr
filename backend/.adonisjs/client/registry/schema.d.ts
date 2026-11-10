@@ -60,6 +60,19 @@ export interface Registry {
       rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/users_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
+  'profile.users.get_status': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/account/status'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['getStatus']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['getStatus']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/users_controller').default['getStatus']>>>
+    }
+  }
   'profile.users.update_status': {
     methods: ["PATCH"]
     pattern: '/api/v1/account/status'

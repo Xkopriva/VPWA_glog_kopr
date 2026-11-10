@@ -29,6 +29,7 @@ router
       .group(() => {
         router.get('profile', [ProfileController, 'show'])
         router.patch('profile', [UsersController, 'update'])
+        router.get('status', [UsersController, 'getStatus'])
         router.patch('status', [UsersController, 'updateStatus'])
         router.delete('profile', [UsersController, 'destroy'])
         router.post('logout', [AccessTokensController, 'destroy'])

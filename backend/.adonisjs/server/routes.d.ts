@@ -8,6 +8,7 @@ export type ScannedRoutes = {
     'auth.access_tokens.store': { paramsTuple?: []; params?: {} }
     'profile.profile.show': { paramsTuple?: []; params?: {} }
     'profile.users.update': { paramsTuple?: []; params?: {} }
+    'profile.users.get_status': { paramsTuple?: []; params?: {} }
     'profile.users.update_status': { paramsTuple?: []; params?: {} }
     'profile.users.destroy': { paramsTuple?: []; params?: {} }
     'profile.access_tokens.destroy': { paramsTuple?: []; params?: {} }
@@ -27,6 +28,7 @@ export type ScannedRoutes = {
   }
   GET: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
+    'profile.users.get_status': { paramsTuple?: []; params?: {} }
     'users.users.index': { paramsTuple?: []; params?: {} }
     'users.users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'channels.channels.index': { paramsTuple?: []; params?: {} }
@@ -34,6 +36,7 @@ export type ScannedRoutes = {
   }
   HEAD: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
+    'profile.users.get_status': { paramsTuple?: []; params?: {} }
     'users.users.index': { paramsTuple?: []; params?: {} }
     'users.users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'channels.channels.index': { paramsTuple?: []; params?: {} }

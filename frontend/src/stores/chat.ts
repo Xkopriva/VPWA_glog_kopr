@@ -113,7 +113,7 @@ async function register(d: { firstName: string; lastName: string; nickName: stri
       state.users.push(user)
     }
     state.currentUserId = user.id
-    setStatus('online')
+    await setStatus('online')
     await fetchChannels()
     return ok(`Vitaj, ${user.firstName}!`)
   } catch (err: unknown) {
@@ -139,7 +139,7 @@ async function login(idOrEmail: string, password: string): Promise<Result> {
       state.users.push(user)
     }
     state.currentUserId = user.id
-    setStatus('online')
+    await setStatus('online')
     await fetchChannels()
     return ok(`Vitaj spat, ${user.firstName}!`)
   } catch (err: unknown) {
@@ -238,16 +238,20 @@ async function fetchChannels(): Promise<void> {
 }
 
 // sets user status and syncs with backend
-function setStatus(s: Status) {
+async function setStatus(s: Status) {
   if (!me.value) return
   me.value.status = s
   if (getStoredToken()) {
     void apiPatch('/account/status', { status: s }).catch(() => {})
   }
-  if (s === 'online' && state.pending.length) {
-    const n = state.pending.length
-    state.pending.splice(0).forEach((m) => addIncoming(m, true))
-    Notify.create({ type: 'info', message: `Kanály aktualizované – ${n} nových správ` })
+  if (s === 'online') {
+    // auto-aktualizacia kanalov po navrate do online
+    await fetchChannels()
+    if (state.pending.length) {
+      const n = state.pending.length
+      state.pending.splice(0).forEach((m) => addIncoming(m, true))
+      Notify.create({ type: 'info', message: `Kanály aktualizované – ${n} nových správ` })
+    }
   }
 }
 

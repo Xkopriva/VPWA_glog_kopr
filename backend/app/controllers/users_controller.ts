@@ -28,6 +28,12 @@ export default class UsersController {
     return serialize(UserTransformer.transform(user))
   }
 
+  // returns current status of authenticated user
+  async getStatus({ auth, serialize }: HttpContext) {
+    const user = auth.getUserOrFail()
+    return serialize({ status: user.status })
+  }
+
   // updates online status of authenticated user
   async updateStatus({ auth, request, serialize }: HttpContext) {
     const user = auth.getUserOrFail()

@@ -32,6 +32,12 @@ const routes = {
     tokens: [[0,"api"],[0,"v1"],[0,"account"],[0,"profile"]],
     types: placeholder as Registry['profile.users.update']['types'],
   },
+  'profile.users.get_status': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/account/status',
+    tokens: [[0,"api"],[0,"v1"],[0,"account"],[0,"status"]],
+    types: placeholder as Registry['profile.users.get_status']['types'],
+  },
   'profile.users.update_status': {
     methods: ["PATCH"],
     pattern: '/api/v1/account/status',
