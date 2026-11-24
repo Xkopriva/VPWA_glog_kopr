@@ -25,6 +25,8 @@ export type ScannedRoutes = {
     'channels.channels.decline_invite': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'channels.channels.revoke': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
     'channels.channels.kick': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.messages.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.messages.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
@@ -33,6 +35,7 @@ export type ScannedRoutes = {
     'users.users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'channels.channels.index': { paramsTuple?: []; params?: {} }
     'channels.channels.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.messages.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   HEAD: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
@@ -41,6 +44,7 @@ export type ScannedRoutes = {
     'users.users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'channels.channels.index': { paramsTuple?: []; params?: {} }
     'channels.channels.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.messages.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   POST: {
     'auth.new_account.store': { paramsTuple?: []; params?: {} }
@@ -50,6 +54,7 @@ export type ScannedRoutes = {
     'channels.channels.invite': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'channels.channels.accept_invite': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'channels.channels.kick': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'channels.messages.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   PATCH: {
     'profile.users.update': { paramsTuple?: []; params?: {} }

@@ -6,6 +6,7 @@ const AccessTokensController = () => import('#controllers/access_tokens_controll
 const ProfileController = () => import('#controllers/profile_controller')
 const UsersController = () => import('#controllers/users_controller')
 const ChannelsController = () => import('#controllers/channels_controller')
+const MessagesController = () => import('#controllers/messages_controller')
 
 // registers base root route
 router.get('/', () => {
@@ -62,6 +63,8 @@ router
         router.delete('/:id/decline-invite', [ChannelsController, 'declineInvite'])
         router.delete('/:id/members/:userId', [ChannelsController, 'revoke'])
         router.post('/:id/kick', [ChannelsController, 'kick'])
+        router.get('/:id/messages', [MessagesController, 'index'])
+        router.post('/:id/messages', [MessagesController, 'store'])
       })
       .prefix('channels')
       .as('channels')

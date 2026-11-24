@@ -44,5 +44,9 @@ export interface ApiDefinition {
       revoke: typeof routes['channels.channels.revoke']
       kick: typeof routes['channels.channels.kick']
     }
+    messages: {
+      index: typeof routes['channels.messages.index']
+      store: typeof routes['channels.messages.store']
+    }
   }
 }

@@ -2,6 +2,7 @@
 import { reactive, computed } from 'vue'
 import { Notify, AppVisibility } from 'quasar'
 import { getStoredToken, setStoredToken, apiGet, apiPost, apiPatch, apiDelete } from '@/services/api'
+import { connectSocket, disconnectSocket } from '@/services/socket'
 
 export type Status = 'online' | 'dnd' | 'offline'
 export interface User { id: number; firstName: string; lastName: string; nickName: string; email: string; password?: string; status: Status }
@@ -115,6 +116,8 @@ async function register(d: { firstName: string; lastName: string; nickName: stri
     state.currentUserId = user.id
     await setStatus('online')
     await fetchChannels()
+    void fetchUsers()
+    startRealtime()
     return ok(`Vitaj, ${user.firstName}!`)
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'registracia zlyhala'
@@ -141,6 +144,8 @@ async function login(idOrEmail: string, password: string): Promise<Result> {
     state.currentUserId = user.id
     await setStatus('online')
     await fetchChannels()
+    void fetchUsers()
+    startRealtime()
     return ok(`Vitaj spat, ${user.firstName}!`)
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'nespravne prihlasovacie udaje'
@@ -157,11 +162,14 @@ async function logout(): Promise<void> {
   } catch {
     // ignores backend error on logout
   } finally {
+    disconnectSocket()
     setStoredToken(null)
     state.currentUserId = null
     state.activeChannelId = null
     state.channels = []
     state.invites = []
+    state.messages = []
+    state.pending = []
   }
 }
 
@@ -448,19 +456,63 @@ async function execute(raw: string): Promise<Result> {
   }
 }
 
-function sendMessage(text: string): Result {
+// sends message to backend, which saves it and pushes it to other members via websocket
+async function sendMessage(text: string): Promise<Result> {
   const c = activeChannel.value
   if (!c || !me.value) return fail('Správu môžete odoslať iba v kanáli, ktorého ste členom.')
-  const mentions = [...text.matchAll(/@(\w+)/g)].map((m) => byNick(m[1]!)?.id).filter((x): x is number => !!x)
-  state.messages.push({ id: nextId(), channelId: c.id, authorId: me.value.id, text, createdAt: Date.now(), mentions })
-  c.lastActivityAt = Date.now()
-  setTyping('')
-  return ok('')
+  try {
+    const m = await apiPost<Message>(`/channels/${c.id}/messages`, { text })
+    if (!state.messages.some((x) => x.id === m.id)) state.messages.push(m)
+    c.lastActivityAt = m.createdAt
+    setTyping('')
+    return ok('')
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'chyba pri odosielani spravy'
+    return fail(msg)
+  }
+}
+
+// loads message history of a channel from backend
+async function fetchMessages(channelId: number): Promise<void> {
+  if (!getStoredToken()) return
+  try {
+    const list = await apiGet<Message[]>(`/channels/${channelId}/messages`)
+    if (!Array.isArray(list)) return
+    state.messages = state.messages.filter((m) => m.channelId !== channelId).concat(list)
+  } catch {
+    // keeps local messages if history can not be loaded
+  }
 }
 
 function setActive(id: number | null) {
   state.activeChannelId = id
-  if (id) state.unread[id] = 0
+  if (id) {
+    state.unread[id] = 0
+    void fetchMessages(id)
+  }
+}
+
+// handles message pushed from backend over websocket
+async function onSocketMessage(m: Message) {
+  if (!me.value || state.messages.some((x) => x.id === m.id)) return
+  if (!userById(m.authorId)) await fetchUsers()
+  if (!state.channels.some((c) => c.id === m.channelId)) await fetchChannels()
+  if (m.authorId === me.value.id) {
+    // own message from another tab, shown without unread counter or notification
+    if (!state.messages.some((x) => x.id === m.id)) state.messages.push(m)
+    return
+  }
+  if (me.value.status === 'offline') state.pending.push(m)
+  else addIncoming(m)
+}
+
+// opens websocket and subscribes to realtime chat events
+function startRealtime() {
+  const s = connectSocket()
+  if (!s || s.hasListeners('message:new')) return
+  s.on('message:new', (m: Message) => void onSocketMessage(m))
+  // reloads open channel after (re)connect so messages missed while disconnected appear
+  s.on('connect', () => { if (state.activeChannelId) void fetchMessages(state.activeChannelId) })
 }
 
 function setTyping(draft: string) {
@@ -486,7 +538,7 @@ function notify(m: Message) {
 
 function addIncoming(m: Message, silent = false) {
   const c = state.channels.find((x) => x.id === m.channelId)
-  if (!c) return
+  if (!c || state.messages.some((x) => x.id === m.id)) return
   state.messages.push(m)
   c.lastActivityAt = m.createdAt
   if (c.id !== state.activeChannelId) state.unread[c.id] = (state.unread[c.id] ?? 0) + 1
@@ -495,6 +547,7 @@ function addIncoming(m: Message, silent = false) {
 
 // background simulation of chat activity
 let started = false
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function simulate() {
   const u = me.value
   if (!u) return
@@ -526,9 +579,11 @@ async function init() {
   await loadCurrentUser()
   await fetchUsers()
   await fetchChannels()
+  if (state.currentUserId) startRealtime()
   void pruneInactive()
   setInterval(() => void pruneInactive(), 60_000)
-  setInterval(simulate, 15_000)
+  // fake chat bot disabled now that real messages are sent through backend, uncomment to enable again
+  // setInterval(simulate, 15_000)
 }
 
 // exports reactive state and functions for components
@@ -551,6 +606,7 @@ export function useChat() {
     loadCurrentUser,
     fetchUsers,
     fetchChannels,
+    fetchMessages,
     setStatus,
     execute,
     acceptInvite,
