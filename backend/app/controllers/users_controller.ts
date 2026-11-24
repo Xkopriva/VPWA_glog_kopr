@@ -2,6 +2,7 @@ import User from '#models/user'
 import { updateUserValidator, updateStatusValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
 import UserTransformer from '#transformers/user_transformer'
+import ws from '#services/ws'
 
 // handles user resource crud operations
 export default class UsersController {
@@ -41,6 +42,9 @@ export default class UsersController {
 
     user.status = status
     await user.save()
+
+    // notifies all connected users about status change
+    ws.emitToAll('user:status', { userId: user.userId, status: user.status })
 
     return serialize(UserTransformer.transform(user))
   }

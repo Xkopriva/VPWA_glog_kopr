@@ -4,6 +4,7 @@ import { createChannelValidator, targetUserValidator } from '#validators/channel
 import ChannelTransformer from '#transformers/channel_transformer'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
+import ws from '#services/ws'
 import { DateTime } from 'luxon'
 
 // handles channel management and membership operations
@@ -322,6 +323,13 @@ export default class ChannelsController {
         created_at: DateTime.now().toSQL(),
       })
     }
+
+    // notifies invited user in real time
+    ws.emitToUsers([targetUser.userId], 'invite:new', {
+      channelId: channel.channelId,
+      channelName: channel.name,
+      invitedBy: user.userId,
+    })
 
     return response.ok({
       message: 'invitation sent successfully',

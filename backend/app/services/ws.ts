@@ -47,6 +47,12 @@ class Ws {
     if (!this.io || !userIds.length) return
     this.io.to(userIds.map((id) => Ws.userRoom(id))).emit(event, payload)
   }
+
+  // emits an event to every connected socket
+  emitToAll(event: string, payload: unknown) {
+    if (!this.io) return
+    this.io.emit(event, payload)
+  }
 }
 
 export default new Ws()

@@ -35,10 +35,13 @@ export default defineRouter((/* { store, ssrContext } */) => {
   });
 
   // guardy: chránené stránky iba pre prihlásených, landing iba pre neprihlásených
-  Router.beforeEach((to) => {
-    const authed = !!useChat().me.value;
+  // pred prvou navigáciou počká na obnovenie prihlásenia z tokenu (refresh stránky)
+  Router.beforeEach(async (to) => {
+    const chat = useChat();
+    await chat.ensureSession();
+    const authed = !!chat.me.value;
     if (!authed && (to.path === '/chatting' || to.path === '/landing-logged')) return '/landing';
-    if (authed && to.path === '/landing') return '/landing-logged';
+    if (authed && to.path === '/landing') return chat.lastChannelRoute();
     return true;
   });
 

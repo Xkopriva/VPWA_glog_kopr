@@ -1,7 +1,7 @@
 <template>
   <div class="q-px-sm q-pb-sm">
     <!-- našepkávanie príkazov -->
-    <div v-if="hints.length" class="panel q-pa-xs q-mb-sm">
+    <div v-if="hints.length" class="panel cmd-hints q-pa-xs q-mb-sm">
       <q-list dense>
         <q-item v-for="h in hints" :key="h.cmd" clickable class="ch-row" style="min-height: 44px" @click="text = h.cmd + ' '; input?.focus()">
           <q-item-section>
@@ -50,3 +50,11 @@ async function submit() {
   input.value?.focus();
 }
 </script>
+
+<style>
+/* nápovedy príkazov: čierne v light mode, biele v dark mode (footer má inak predvolene biely text) */
+.cmd-hints .q-item__label { color: #000; }
+.cmd-hints .q-item__label--caption { color: rgba(0, 0, 0, 0.6); }
+body.body--dark .cmd-hints .q-item__label { color: #fff; }
+body.body--dark .cmd-hints .q-item__label--caption { color: rgba(255, 255, 255, 0.7); }
+</style>

@@ -170,6 +170,7 @@ async function logout(): Promise<void> {
     state.invites = []
     state.messages = []
     state.pending = []
+    try { localStorage.removeItem(LAST_CHANNEL_KEY) } catch { /* ignores storage error */ }
   }
 }
 
@@ -489,7 +490,33 @@ function setActive(id: number | null) {
   if (id) {
     state.unread[id] = 0
     void fetchMessages(id)
+    try { localStorage.setItem(LAST_CHANNEL_KEY, String(id)) } catch { /* ignores storage error */ }
   }
+}
+
+// storage key for last opened channel, restored after page refresh
+const LAST_CHANNEL_KEY = 'flack_last_channel'
+
+// returns route of last opened channel if user is still its member, otherwise logged landing page
+function lastChannelRoute(): string {
+  let id = 0
+  try { id = Number(localStorage.getItem(LAST_CHANNEL_KEY)) } catch { /* ignores storage error */ }
+  const c = state.channels.find((x) => x.id === id)
+  return c && me.value && (c.members || []).includes(me.value.id) ? `/chatting?c=${id}` : '/landing-logged'
+}
+
+// restores logged user from stored token once, so router knows about login before first navigation
+let sessionPromise: Promise<void> | null = null
+function ensureSession(): Promise<void> {
+  if (state.currentUserId || !getStoredToken()) return Promise.resolve()
+  sessionPromise ??= (async () => {
+    await loadCurrentUser()
+    if (state.currentUserId) {
+      await fetchUsers()
+      await fetchChannels()
+    }
+  })().finally(() => { sessionPromise = null })
+  return sessionPromise
 }
 
 // handles message pushed from backend over websocket
@@ -506,11 +533,26 @@ async function onSocketMessage(m: Message) {
   else addIncoming(m)
 }
 
+// handles status change of any user pushed from backend
+async function onSocketStatus(p: { userId: number; status: Status }) {
+  if (!userById(p.userId)) await fetchUsers()
+  const u = userById(p.userId)
+  if (u) u.status = p.status
+}
+
+// handles new channel invitation pushed from backend
+async function onSocketInvite(p: { channelId: number; channelName: string }) {
+  await fetchChannels()
+  Notify.create({ type: 'info', message: `Nová pozvánka do #${p.channelName}` })
+}
+
 // opens websocket and subscribes to realtime chat events
 function startRealtime() {
   const s = connectSocket()
   if (!s || s.hasListeners('message:new')) return
   s.on('message:new', (m: Message) => void onSocketMessage(m))
+  s.on('user:status', (p: { userId: number; status: Status }) => void onSocketStatus(p))
+  s.on('invite:new', (p: { channelId: number; channelName: string }) => void onSocketInvite(p))
   // reloads open channel after (re)connect so messages missed while disconnected appear
   s.on('connect', () => { if (state.activeChannelId) void fetchMessages(state.activeChannelId) })
 }
@@ -576,7 +618,7 @@ function simulate() {
 async function init() {
   if (started) return
   started = true
-  await loadCurrentUser()
+  await ensureSession()
   await fetchUsers()
   await fetchChannels()
   if (state.currentUserId) startRealtime()
@@ -607,6 +649,8 @@ export function useChat() {
     fetchUsers,
     fetchChannels,
     fetchMessages,
+    ensureSession,
+    lastChannelRoute,
     setStatus,
     execute,
     acceptInvite,
